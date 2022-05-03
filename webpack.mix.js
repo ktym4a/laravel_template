@@ -18,7 +18,7 @@ mix.js("resources/js/app.js", "public/js").postCss(
 );
 
 mix.browserSync({
-    proxy: 'localhost',
-    port: '8080',
+    proxy: "localhost",
+    port: "8080",
     open: false,
 });
