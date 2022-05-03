@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use \App\Models\User;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,10 +46,13 @@ Route::get('/profile/password', function () {
     return view('user.profile-password');
 })->middleware('auth')->name('profile.password');
 
-Route::delete('/user', function () {
+Route::delete('/user', function (Request $request) {
     $user = User::find(Auth::user()->id);
 
     Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
     if ($user->delete()) {
         return redirect('login')->with('status', 'Your account has been deleted!');
     }
