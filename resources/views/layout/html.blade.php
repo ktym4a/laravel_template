@@ -29,6 +29,8 @@
     <main>
         @yield('content')
     </main>
+
+    <x-shared.footer />
 </body>
 
 </html>
