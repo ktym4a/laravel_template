@@ -1,25 +1,30 @@
 @extends('layout.html')
 
 @section('meta')
-<x-shared.meta title="ユーザー登録">
+<x-shared.meta title="パスワードの変更">
 </x-shared.meta>
 @endsection
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+
     <div class="max-w-md w-full space-y-8">
         <div>
             <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
                 alt="Workflow">
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Reset your account</h2>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Change your password</h2>
             <p class="mt-2 text-center text-sm text-gray-600">
                 Or
-                <a href="{{route('login')}}" class="font-medium text-indigo-600 hover:text-indigo-500"> Sign in to
-                    your
-                    account
+                <a href="{{route('profile.show')}}" class="font-medium text-indigo-600 hover:text-indigo-500"> Back
+                    your profile
                 </a>
             </p>
         </div>
+        @if (session('status'))
+        <div class="mb-4 font-medium text-sm text-green-600">
+            {{ session('status') }}
+        </div>
+        @endif
         @if ($errors->any())
         <div class="mb-4">
             @foreach ($errors->all() as $error)
@@ -29,15 +34,16 @@
             @endforeach
         </div>
         @endif
-        <form class="mt-8 space-y-6" action="{{route('password.update')}}" method="POST">
+        <form class="mt-8 space-y-6" action="{{route('user-password.update')}}" method="POST">
+            @method('PUT')
             {{ csrf_field() }}
             <div class="rounded-md shadow-sm -space-y-px">
-                <input type="hidden" name="token" value="{{$request->token}}" />
                 <div>
-                    <label for="email-address" class="sr-only">Email address</label>
-                    <input id="email-address" name="email" type="email" autocomplete="email" required
-                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="Email address" value="{{ old('email') }}">
+                    <label for="current_password" class="sr-only">Current password</label>
+                    <input id="current_password" name="current_password" type="password" autocomplete="current-password"
+                        required
+                        class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        placeholder="Current password" value="{{ old('current_password') }}">
                 </div>
                 <div>
                     <label for="password" class="sr-only">Password</label>
@@ -67,7 +73,7 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </span>
-                    reset
+                    Change
                 </button>
             </div>
         </form>

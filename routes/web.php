@@ -17,34 +17,36 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-})->name('test');
+    return view('pages.top');
+})->name('top');
+
+Route::name('profile.')->prefix('profile')->middleware('auth')->group(function () {
+    Route::get('/', function () {
+        $user = Auth::user();
+        return view('pages.profile', compact('user'));
+    })->name('show');
+
+    Route::get('/edit', function () {
+        $user = Auth::user();
+        return view('pages.profile-edit', compact('user'));
+    })->name('edit');
+
+    Route::get('/password', function () {
+        return view('pages.profile-password');
+    })->name('password');
+});
 
 Route::get('/home', function () {
     return view('welcome');
 })->middleware('auth')->name('home');
 
-Route::get('/home1', function () {
-    return view('welcome');
-})->middleware('verified')->name('home1');
+Route::get('/dashboard', function () {
+    return view('pages.dashboard');
+})->middleware('verified')->name('dashboard');
 
 Route::get('/home2', function () {
     return view('welcome');
 })->middleware(['verified', 'password.confirm'])->name('home2');
-
-Route::get('/profile', function () {
-    $user = Auth::user();
-    return view('user.profile', compact('user'));
-})->middleware('auth')->name('profile');
-
-Route::get('/profile/edit', function () {
-    $user = Auth::user();
-    return view('user.profile-edit', compact('user'));
-})->middleware('auth')->name('profile.edit');
-
-Route::get('/profile/password', function () {
-    return view('user.profile-password');
-})->middleware('auth')->name('profile.password');
 
 Route::delete('/user', function (Request $request) {
     $user = User::find(Auth::user()->id);
